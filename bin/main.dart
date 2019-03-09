@@ -1,5 +1,5 @@
-import 'package:raspberry_system_monitor_server/raspberry_system_monitor_server.dart';
 import 'dart:convert';
+import 'package:raspberry_system_monitor_server/raspberry_system_monitor_server.dart';
 
 Future main() async {
   final app = Application<RaspberrySystemMonitorServerChannel>()
