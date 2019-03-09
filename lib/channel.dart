@@ -15,6 +15,10 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
   }
 
   Response _uptime(Request req) {
-    return Response.notFound();
+    dynamic result;
+    Process.run('bash', ['-c', 'uptime'],
+            includeParentEnvironment: true, runInShell: true)
+        .then((process) => result = process.stdout);
+    return Response.ok({"uptime": result});
   }
 }
