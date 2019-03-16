@@ -16,8 +16,7 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
 
   Response _uptime(Request req) {
     ProcessResult result;
-    result = Process.runSync(
-        'bash', ['-c', "uptime | tr \',\' \' \' | cut -d\" \" -f5"],
+    result = Process.runSync('bash', ['-c', 'uptime'],
         includeParentEnvironment: true, runInShell: true);
     String uptime = result.stdout.toString();
     RegExp exp = RegExp('up (.*?)[1-9], ');
