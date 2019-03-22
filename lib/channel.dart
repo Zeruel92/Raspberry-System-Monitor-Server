@@ -14,7 +14,7 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
     router.route("/poweroff").linkFunction(_powerOff);
     router.route("/reboot").linkFunction(_reboot);
     router.route("/torrentstatus").linkFunction(_statusTorrent);
-    router.route("/torrentToggle").linkFunction(_torrentToggle);
+    router.route("/torrentToggle/:toggle").linkFunction(_torrentToggle);
     return router;
   }
 
@@ -77,7 +77,7 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
   }
 
   Response _torrentToggle(Request req) {
-    final String toggle = req.body.toString();
+    final toggle = req.path.variables["toggle"];
     String command;
     if (toggle.contains('true')) {
       command = 'start';
