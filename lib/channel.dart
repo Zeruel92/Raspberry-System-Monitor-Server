@@ -14,6 +14,7 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
     router.route("/poweroff").linkFunction(_powerOff);
     router.route("/reboot").linkFunction(_reboot);
     router.route("/torrentstatus").linkFunction(_statusTorrent);
+    router.route("/torrentToggle").linkFunction(_torrentToggle);
     return router;
   }
 
@@ -73,5 +74,19 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
     final Map<String, dynamic> headers = {};
     headers["content-type"] = "application/json";
     return Response.ok(body, headers: headers);
+  }
+
+  Response _torrentToggle(Request req) {
+    final dynamic toggle = req.body.toString();
+    String command;
+    if (toggle == 'true') {
+      command = 'start';
+    } else {
+      command = 'stop';
+    }
+    final ProcessResult result = Process.runSync(
+        'bash', ['-c', 'sudo systemctl $command transmission-daemon'],
+        includeParentEnvironment: true, runInShell: true);
+    Response.ok('');
   }
 }
