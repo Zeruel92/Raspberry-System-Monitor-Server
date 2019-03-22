@@ -77,7 +77,7 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
   }
 
   Response _torrentToggle(Request req) {
-    final dynamic toggle = req.body.toString();
+    final String toggle = req.body.toString();
     String command;
     if (toggle == 'true') {
       command = 'start';
@@ -87,7 +87,6 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
     final ProcessResult result = Process.runSync(
         'bash', ['-c', 'sudo systemctl $command transmission-daemon'],
         includeParentEnvironment: true, runInShell: true);
-    print(result.stdout.toString());
     return Response.ok('');
   }
 }
