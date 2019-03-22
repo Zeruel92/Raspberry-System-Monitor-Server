@@ -13,6 +13,7 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
     router.route("/uptime").linkFunction(_uptime);
     router.route("/poweroff").linkFunction(_powerOff);
     router.route("/reboot").linkFunction(_reboot);
+    router.route("/torrentstatus").linkFunction(_statusTorrent);
     return router;
   }
 
@@ -56,5 +57,16 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
     result = Process.runSync('bash', ['-c', '/home/pi/wrapper.sh reboot'],
         includeParentEnvironment: true, runInShell: true);
     return Response.ok('Reboot in 1 minute');
+  }
+
+  Response _statusTorrent(Request req) {
+    final ProcessResult result = Process.runSync(
+        'bash', ['-c', 'transmission-remote -l'],
+        includeParentEnvironment: true, runInShell: true);
+    final Map body = {};
+    body['torrentStatus'] = result.stdout.toString();
+    final Map<String, dynamic> headers = {};
+    headers["content-type"] = "application/json";
+    return Response.ok(body, headers: headers);
   }
 }
