@@ -11,6 +11,8 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
   Controller get entryPoint {
     final router = Router();
     router.route("/uptime").linkFunction(_uptime);
+    router.route("/poweroff").linkFunction(_powerOff);
+    router.route("/reboot").linkFunction(_reboot);
     return router;
   }
 
@@ -40,5 +42,19 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
     body['loadAvg15'] = loadAvg15;
     print(body);
     return Response.ok(body, headers: headers);
+  }
+
+  Response _powerOff(Request req) {
+    ProcessResult result;
+    result = Process.runSync('bash', ['-c', '/home/pi/wrapper.sh shutdown'],
+        includeParentEnvironment: true, runInShell: true);
+    return Response.ok('Shutdown in 1 minute');
+  }
+
+  Response _reboot(Request req) {
+    ProcessResult result;
+    result = Process.runSync('bash', ['-c', '/home/pi/wrapper.sh reboot'],
+        includeParentEnvironment: true, runInShell: true);
+    return Response.ok('Reboot in 1 minute');
   }
 }
