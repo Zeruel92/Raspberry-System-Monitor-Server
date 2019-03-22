@@ -87,6 +87,6 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
     final ProcessResult result = Process.runSync(
         'bash', ['-c', 'sudo systemctl $command transmission-daemon'],
         includeParentEnvironment: true, runInShell: true);
-    Response.ok('');
+    return Response.ok('');
   }
 }
