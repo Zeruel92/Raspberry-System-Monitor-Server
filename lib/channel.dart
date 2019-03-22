@@ -79,7 +79,7 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
   Response _torrentToggle(Request req) {
     final String toggle = req.body.toString();
     String command;
-    if (toggle == 'true') {
+    if (toggle.contains('true')) {
       command = 'start';
     } else {
       command = 'stop';
