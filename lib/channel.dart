@@ -19,9 +19,9 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
     result = Process.runSync('bash', ['-c', 'uptime'],
         includeParentEnvironment: true, runInShell: true);
     String uptime = result.stdout.toString();
-    RegExp exp = RegExp('up (.*?)[0-9],');
-    Match ab = exp.firstMatch(uptime);
-    uptime = uptime.substring(ab.start + 3, ab.end - 1);
+    final RegExp exp = RegExp('up (.*?)[0-9] user');
+    final Match ab = exp.firstMatch(uptime);
+    uptime = uptime.substring(ab.start + 3, ab.end - 9);
     result = Process.runSync('bash', ['-c', 'cut -d \' \' -f1 /proc/loadavg'],
         includeParentEnvironment: true, runInShell: true);
     final double loadAvg = double.parse(result.stdout.toString());
