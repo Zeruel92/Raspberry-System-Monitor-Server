@@ -65,6 +65,11 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
         includeParentEnvironment: true, runInShell: true);
     final Map body = {};
     body['torrentStatus'] = result.stdout.toString();
+    if (result.stdout.toString().contains('ETA')) {
+      body['running'] = true;
+    } else {
+      body['running'] = false;
+    }
     final Map<String, dynamic> headers = {};
     headers["content-type"] = "application/json";
     return Response.ok(body, headers: headers);
