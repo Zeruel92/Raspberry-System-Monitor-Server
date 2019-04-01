@@ -15,6 +15,7 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
     router.route("/reboot").linkFunction(_reboot);
     router.route("/torrentstatus").linkFunction(_statusTorrent);
     router.route("/torrentToggle/:toggle").linkFunction(_torrentToggle);
+    router.route("/teledart/:toggle").linkFunction(_teledart);
     return router;
   }
 
@@ -88,5 +89,34 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
         'bash', ['-c', 'sudo systemctl $command transmission-daemon'],
         includeParentEnvironment: true, runInShell: true);
     return Response.ok('');
+  }
+
+  Response _teledart(Request req) {
+    if (req.method == 'GET') {
+      final Map<String, dynamic> body = {};
+      final Map<String, dynamic> headers = {};
+      headers["content-type"] = "application/json";
+      final ProcessResult result = Process.runSync(
+          'bash', ['-c', 'sudo systemctl status teledart | grep active'],
+          includeParentEnvironment: true, runInShell: true);
+      if (result.stdout.toString().contains('running')) {
+        body['running'] = true;
+      } else {
+        body['running'] = false;
+      }
+      return Response.ok(body, headers: headers);
+    } else {
+      final toggle = req.path.variables["toggle"];
+      String command;
+      if (toggle.contains('true')) {
+        command = 'start';
+      } else {
+        command = 'stop';
+      }
+      final ProcessResult result = Process.runSync(
+          'bash', ['-c', 'sudo systemctl $command teledart'],
+          includeParentEnvironment: true, runInShell: true);
+      return Response.ok('');
+    }
   }
 }

@@ -18,7 +18,16 @@ Future main() async {
       //print('Broadcasted');
     });
   });
-
+  Timer t = startTimer();
   print("Application started on port: ${app.options.port}.");
   print("Use Ctrl-C (SIGINT) to stop running the application.");
+}
+
+Timer startTimer() {
+  Duration duration = new Duration(minutes: 10);
+  return new Timer.periodic(duration, timerCallback);
+}
+
+void timerCallback(Timer t) {
+  exit(0);
 }
