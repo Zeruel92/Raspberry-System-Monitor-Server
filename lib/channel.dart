@@ -7,6 +7,8 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
         (rec) => print("$rec ${rec.error ?? ""} ${rec.stackTrace ?? ""}"));
   }
 
+  //TODO unify torrent api
+
   @override
   Controller get entryPoint {
     final router = Router();
