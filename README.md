@@ -1,13 +1,14 @@
 # Raspberry System Monitor Server
 
-Server che fornisce le API per l'app [1][Raspberry System Monitor].
+Server che fornisce le API per l'app [Raspberry System Monitor][1].
 Al momento il server fornisce l'API per:
 
-[v] Uptime
-[v] Controllo remoto torrent
-[v] Controllo remoto [2][teledart]
-[v] Controllo remoto Condivisioni Samba (avvia ferma daemon)
-[] Controllo remoto server ssh
+- [x] Uptime
+- [x] Controllo remoto torrent
+- [x] Controllo remoto [teledart][2]
+- [x] Controllo remoto Condivisioni Samba (avvia ferma daemon)
+- [ ] Controllo remoto server ssh
 
-[//]: 
-[1]: github.com
+[//]: #'links'
+[1]: https://github.com/pspgt/Raspberry-System-Monitor
+[2]: https://github.com/pspgt/teledart
