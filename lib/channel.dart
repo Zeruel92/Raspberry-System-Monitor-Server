@@ -55,8 +55,7 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
   }
 
   Response _reboot(Request req) {
-    ProcessResult result;
-    result = Process.runSync('bash', ['-c', '/home/pi/wrapper.sh reboot'],
+    Process.runSync('bash', ['-c', '/home/pi/wrapper.sh reboot'],
         includeParentEnvironment: true, runInShell: true);
     return Response.ok('Reboot in 1 minute');
   }
@@ -85,7 +84,7 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
     } else {
       command = 'stop';
     }
-    final ProcessResult result = Process.runSync(
+    Process.runSync(
         'bash', ['-c', 'sudo systemctl $command transmission-daemon'],
         includeParentEnvironment: true, runInShell: true);
     return Response.ok('');
@@ -113,8 +112,7 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
       } else {
         command = 'stop';
       }
-      final ProcessResult result = Process.runSync(
-          'bash', ['-c', 'sudo systemctl $command teledart'],
+      Process.runSync('bash', ['-c', 'sudo systemctl $command teledart'],
           includeParentEnvironment: true, runInShell: true);
       return Response.ok('');
     }
@@ -143,8 +141,7 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
       } else {
         command = 'stop';
       }
-      final ProcessResult result = Process.runSync(
-          'bash', ['-c', 'sudo /etc/init.d/smb $command'],
+      Process.runSync('bash', ['-c', 'sudo /etc/init.d/smb $command'],
           includeParentEnvironment: true, runInShell: true);
       return Response.ok('');
     }
