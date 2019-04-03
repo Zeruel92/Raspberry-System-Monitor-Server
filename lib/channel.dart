@@ -121,7 +121,6 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
   }
 
   Response _smb(Request req) {
-    //TODO verify systemctl call
     if (req.method == 'GET') {
       final Map<String, dynamic> body = {};
       final Map<String, dynamic> headers = {};
@@ -143,7 +142,7 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
       } else {
         command = 'stop';
       }
-      Process.runSync('bash', ['-c', 'sudo /etc/init.d/smb $command'],
+      Process.runSync('bash', ['-c', 'sudo /etc/init.d/samba $command'],
           includeParentEnvironment: true, runInShell: true);
       return Response.ok('');
     }
