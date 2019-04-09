@@ -7,16 +7,13 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
         (rec) => print("$rec ${rec.error ?? ""} ${rec.stackTrace ?? ""}"));
   }
 
-  //TODO unify torrent api
-
   @override
   Controller get entryPoint {
     final router = Router();
     router.route("/uptime").linkFunction(_uptime);
     router.route("/poweroff").linkFunction(_powerOff);
     router.route("/reboot").linkFunction(_reboot);
-    router.route("/torrentstatus").linkFunction(_statusTorrent);
-    router.route("/torrentToggle/:toggle").linkFunction(_torrentToggle);
+    router.route("/torrentstatus/:toggle").linkFunction(_statusTorrent);
     router.route("/teledart/:toggle").linkFunction(_teledart);
     router.route("/smb/:toggle").linkFunction(_smb);
     return router;
@@ -63,33 +60,33 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
   }
 
   Response _statusTorrent(Request req) {
-    final ProcessResult result = Process.runSync(
-        'bash', ['-c', 'transmission-remote -l'],
-        includeParentEnvironment: true, runInShell: true);
-    final Map body = {};
-    body['torrentStatus'] = result.stdout.toString();
-    if (result.stdout.toString().contains('ETA')) {
-      body['running'] = true;
+    if (req.method == 'GET') {
+      final ProcessResult result = Process.runSync(
+          'bash', ['-c', 'transmission-remote -l'],
+          includeParentEnvironment: true, runInShell: true);
+      final Map body = {};
+      body['torrentStatus'] = result.stdout.toString();
+      if (result.stdout.toString().contains('ETA')) {
+        body['running'] = true;
+      } else {
+        body['running'] = false;
+      }
+      final Map<String, dynamic> headers = {};
+      headers["content-type"] = "application/json";
+      return Response.ok(body, headers: headers);
     } else {
-      body['running'] = false;
+      final toggle = req.path.variables["toggle"];
+      String command;
+      if (toggle.contains('true')) {
+        command = 'start';
+      } else {
+        command = 'stop';
+      }
+      Process.runSync(
+          'bash', ['-c', 'sudo systemctl $command transmission-daemon'],
+          includeParentEnvironment: true, runInShell: true);
+      return Response.ok('');
     }
-    final Map<String, dynamic> headers = {};
-    headers["content-type"] = "application/json";
-    return Response.ok(body, headers: headers);
-  }
-
-  Response _torrentToggle(Request req) {
-    final toggle = req.path.variables["toggle"];
-    String command;
-    if (toggle.contains('true')) {
-      command = 'start';
-    } else {
-      command = 'stop';
-    }
-    Process.runSync(
-        'bash', ['-c', 'sudo systemctl $command transmission-daemon'],
-        includeParentEnvironment: true, runInShell: true);
-    return Response.ok('');
   }
 
   Response _teledart(Request req) {
