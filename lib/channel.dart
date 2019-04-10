@@ -16,6 +16,7 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
     router.route("/torrentstatus/:toggle").linkFunction(_statusTorrent);
     router.route("/teledart/:toggle").linkFunction(_teledart);
     router.route("/smb/:toggle").linkFunction(_smb);
+    router.route("/ssh/:toggle").linkFunction(_ssh);
     return router;
   }
 
@@ -140,6 +141,34 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
         command = 'stop';
       }
       Process.runSync('bash', ['-c', 'sudo /etc/init.d/samba $command'],
+          includeParentEnvironment: true, runInShell: true);
+      return Response.ok('');
+    }
+  }
+
+  Response _ssh(Request req) {
+    if (req.method == 'GET') {
+      final Map<String, dynamic> body = {};
+      final Map<String, dynamic> headers = {};
+      headers["content-type"] = "application/json";
+      final ProcessResult result = Process.runSync(
+          'bash', ['-c', 'sudo systemctl status sshd | grep active'],
+          includeParentEnvironment: true, runInShell: true);
+      if (result.stdout.toString().contains('running')) {
+        body['running'] = true;
+      } else {
+        body['running'] = false;
+      }
+      return Response.ok(body, headers: headers);
+    } else {
+      final toggle = req.path.variables["toggle"];
+      String command;
+      if (toggle.contains('true')) {
+        command = 'start';
+      } else {
+        command = 'stop';
+      }
+      Process.runSync('bash', ['-c', 'sudo systemctl $command sshd'],
           includeParentEnvironment: true, runInShell: true);
       return Response.ok('');
     }
