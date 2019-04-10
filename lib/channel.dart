@@ -21,6 +21,7 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
   }
 
   Response _uptime(Request req) {
+    //TODO: add temp into body response
     ProcessResult result;
     result = Process.runSync('bash', ['-c', 'uptime'],
         includeParentEnvironment: true, runInShell: true);
