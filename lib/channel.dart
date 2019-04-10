@@ -44,7 +44,6 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
     body['time'] = uptime;
     body['loadAvg5'] = loadAvg5;
     body['loadAvg15'] = loadAvg15;
-    print(body);
     return Response.ok(body, headers: headers);
   }
 
