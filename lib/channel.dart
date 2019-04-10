@@ -45,9 +45,9 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
     print(result.stdout
         .toString()
         .substring(result.stdout.toString().indexOf('=') + 1));
-    final double temp = double.parse(result.stdout
-        .toString()
-        .substring(result.stdout.toString().indexOf('=') + 1));
+    final double temp = double.parse(result.stdout.toString().substring(
+        result.stdout.toString().indexOf('=') + 1,
+        result.stdout.toString().length - 3));
 
     final Map<String, dynamic> headers = {};
     headers["content-type"] = "application/json";
