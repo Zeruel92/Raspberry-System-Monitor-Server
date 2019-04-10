@@ -158,7 +158,7 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
       final Map<String, dynamic> headers = {};
       headers["content-type"] = "application/json";
       final ProcessResult result = Process.runSync(
-          'bash', ['-c', 'sudo systemctl status sshd | grep active'],
+          'bash', ['-c', 'sudo systemctl status ssh | grep active'],
           includeParentEnvironment: true, runInShell: true);
       if (result.stdout.toString().contains('running')) {
         body['running'] = true;
@@ -174,7 +174,7 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
       } else {
         command = 'stop';
       }
-      Process.runSync('bash', ['-c', 'sudo systemctl $command sshd'],
+      Process.runSync('bash', ['-c', 'sudo systemctl $command ssh'],
           includeParentEnvironment: true, runInShell: true);
       return Response.ok('');
     }
