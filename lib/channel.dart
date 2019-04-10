@@ -21,6 +21,7 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
   }
 
   Response _uptime(Request req) {
+    //TODO verificare funzionamento su raspberry (su ubuntu manca vcgencmd )
     ProcessResult result;
     result = Process.runSync('bash', ['-c', 'uptime'],
         includeParentEnvironment: true, runInShell: true);
@@ -40,9 +41,14 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
     result = Process.runSync(
         'bash', ['-c', '/opt/vc/bin/vcgencmd measure_temp'],
         includeParentEnvironment: true, runInShell: true);
+    print(result.stdout.toString());
+    print(result.stdout
+        .toString()
+        .substring(result.stdout.toString().indexOf('=') + 1));
     final double temp = double.parse(result.stdout
         .toString()
         .substring(result.stdout.toString().indexOf('=') + 1));
+
     final Map<String, dynamic> headers = {};
     headers["content-type"] = "application/json";
     final Map<String, dynamic> body = {};
