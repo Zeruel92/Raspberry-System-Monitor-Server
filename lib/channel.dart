@@ -21,7 +21,6 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
   }
 
   Response _uptime(Request req) {
-    //TODO: add temp into body response
     ProcessResult result;
     result = Process.runSync('bash', ['-c', 'uptime'],
         includeParentEnvironment: true, runInShell: true);
@@ -38,6 +37,10 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
     result = Process.runSync('bash', ['-c', 'cut -d \' \' -f3 /proc/loadavg'],
         includeParentEnvironment: true, runInShell: true);
     final double loadAvg15 = double.parse(result.stdout.toString());
+    result = Process.runSync(
+        'bash', ['-c', '/opt/vc/bin/vcgencmd measure_temp'],
+        includeParentEnvironment: true, runInShell: true);
+    final String temp = result.stdout.toString();
     final Map<String, dynamic> headers = {};
     headers["content-type"] = "application/json";
     final Map<String, dynamic> body = {};
@@ -45,6 +48,7 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
     body['time'] = uptime;
     body['loadAvg5'] = loadAvg5;
     body['loadAvg15'] = loadAvg15;
+    body['temp'] = temp;
     return Response.ok(body, headers: headers);
   }
 
