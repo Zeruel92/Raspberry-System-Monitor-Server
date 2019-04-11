@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:raspberry_system_monitor_server/raspberry_system_monitor_server.dart';
 
 Future main() async {
+  await _update();
+
   final app = Application<RaspberrySystemMonitorServerChannel>()
     ..options.configurationFilePath = "config.yaml"
     ..options.port = 8888;
@@ -30,4 +32,8 @@ Timer startTimer() {
 
 void timerCallback(Timer t) {
   exit(0);
+}
+
+Future<void> _update() async {
+  //TODO git pull
 }
