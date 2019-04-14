@@ -9,6 +9,7 @@ Restart=always
 RestartSec=1
 User=pi
 ExecStart=/home/pi/dart-sdk/bin/dart /home/pi/raspberry_system_monitor_server/bin/main.dart
+WorkingDirectory=/home/pi/raspberry_system_monitor_server
 
 [Install]
 WantedBy=multi-user.target
