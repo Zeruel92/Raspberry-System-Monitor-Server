@@ -38,6 +38,7 @@ Future<void> _update() async {
           includeParentEnvironment: true, runInShell: true)
       .then((result) {
     if (!result.stdout.toString().contains('Already')) {
+      print(result.stdout.toString());
       exit(0);
     }
   });
