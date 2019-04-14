@@ -34,7 +34,7 @@ void timerCallback(Timer t) {
 }
 
 Future<void> _update() async {
-  return Process.run('bash', ['-c', 'git pull'],
+  return Process.run('bash', ['-c', 'pwd'],
           includeParentEnvironment: true, runInShell: true)
       .then((result) {
     if (!result.stdout.toString().contains('Already')) {
