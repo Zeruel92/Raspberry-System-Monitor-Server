@@ -17,7 +17,6 @@ Future main() async {
     final List<int> data = utf8.encode('rpi_broadcast_message');
     Timer.periodic(Duration(seconds: 10), (_) {
       udpSocket.send(data, InternetAddress('192.168.1.255'), 8889);
-      //print('Broadcasted');
     });
   });
   startTimer();
