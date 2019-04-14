@@ -7,7 +7,19 @@ Al momento il server fornisce l'API per:
 - [x] Controllo remoto torrent
 - [x] Controllo remoto [teledart][2]
 - [x] Controllo remoto Condivisioni Samba (avvia ferma daemon)
-- [ ] Controllo remoto server ssh
+- [x] Controllo remoto server ssh
+
+
+# Installing service
+Per gli utenti Systemd è sufficiente copiare il file rsms.service in /lib/systemd/sytem e dare un 
+```bash
+sudo systemctl daemon-reload
+```
+ e poi avviare il server con 
+
+```bash
+sudo systemctl start rsms
+```
 
 [//]: #'links'
 [1]: https://github.com/pspgt/Raspberry-System-Monitor
