@@ -43,3 +43,7 @@ Future<void> _update() async {
     }
   });
 }
+
+//TODO: wrapper.sh into dart code
+//TODO: detecting broadcast address inside code
+//TODO: supporting netatalk
