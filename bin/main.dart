@@ -44,5 +44,4 @@ Future<void> _update() async {
   });
 }
 
-//TODO wrapper.sh into dart code
 //TODO supporting netatalk

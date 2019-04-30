@@ -55,13 +55,15 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
   }
 
   Response _powerOff(Request req) {
-    Process.runSync('bash', ['-c', '/home/pi/wrapper.sh shutdown'],
+    _stopAllServices();
+    Process.runSync('bash', ['-c', 'sudo shutdown -P +1'],
         includeParentEnvironment: true, runInShell: true);
     return Response.ok('Shutdown in 1 minute');
   }
 
   Response _reboot(Request req) {
-    Process.runSync('bash', ['-c', '/home/pi/wrapper.sh reboot'],
+    _stopAllServices();
+    Process.runSync('bash', ['-c', 'sudo shutdown -r +1'],
         includeParentEnvironment: true, runInShell: true);
     return Response.ok('Reboot in 1 minute');
   }
@@ -89,9 +91,7 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
       } else {
         command = 'stop';
       }
-      Process.runSync(
-          'bash', ['-c', 'sudo systemctl $command transmission-daemon'],
-          includeParentEnvironment: true, runInShell: true);
+      _serviceHandler(command, 'transmission-daemon');
       return Response.ok('');
     }
   }
@@ -118,8 +118,7 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
       } else {
         command = 'stop';
       }
-      Process.runSync('bash', ['-c', 'sudo systemctl $command teledart'],
-          includeParentEnvironment: true, runInShell: true);
+      _serviceHandler(command, 'teledart');
       return Response.ok('');
     }
   }
@@ -146,8 +145,7 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
       } else {
         command = 'stop';
       }
-      Process.runSync('bash', ['-c', 'sudo /etc/init.d/samba $command'],
-          includeParentEnvironment: true, runInShell: true);
+      _serviceHandler(command, 'samba');
       return Response.ok('');
     }
   }
@@ -174,9 +172,32 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
       } else {
         command = 'stop';
       }
-      Process.runSync('bash', ['-c', 'sudo systemctl $command ssh'],
-          includeParentEnvironment: true, runInShell: true);
+      _serviceHandler(command, 'ssh');
       return Response.ok('');
     }
+  }
+
+  void _serviceHandler(String command, String service) {
+    if (service == 'samba') {
+      Process.run('bash', ['-c', 'sudo /etc/init.d/samba $command'],
+          includeParentEnvironment: true, runInShell: true);
+    } else {
+      Process.run('bash', ['-c', 'sudo systemctl $command $service'],
+          includeParentEnvironment: true, runInShell: true);
+    }
+  }
+
+  void _stopAllServices() {
+    _serviceHandler('stop', 'ssh');
+    _serviceHandler('stop', 'teledart');
+    _serviceHandler('stop', 'samba');
+    _serviceHandler('stop', 'transmission-daemon');
+  }
+
+  void _startAllServices() {
+    _serviceHandler('start', 'ssh');
+    _serviceHandler('start', 'teledart');
+    _serviceHandler('start', 'samba');
+    _serviceHandler('start', 'transmission-daemon');
   }
 }
