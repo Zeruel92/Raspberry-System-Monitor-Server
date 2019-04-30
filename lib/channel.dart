@@ -17,6 +17,7 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
     router.route("/teledart/:toggle").linkFunction(_teledart);
     router.route("/smb/:toggle").linkFunction(_smb);
     router.route("/ssh/:toggle").linkFunction(_ssh);
+    router.route("/netatalk/:toggle").linkFunction(_netatalk);
     router.route("/service/stopall").linkFunction(_stopall);
     router.route("/service/startall").linkFunction(_startall);
     return router;
@@ -179,6 +180,33 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
     }
   }
 
+  Response _netatalk(Request req) {
+    if (req.method == 'GET') {
+      final Map<String, dynamic> body = {};
+      final Map<String, dynamic> headers = {};
+      headers["content-type"] = "application/json";
+      final ProcessResult result = Process.runSync(
+          'bash', ['-c', 'sudo systemctl status netatalk | grep active'],
+          includeParentEnvironment: true, runInShell: true);
+      if (result.stdout.toString().contains('running')) {
+        body['running'] = true;
+      } else {
+        body['running'] = false;
+      }
+      return Response.ok(body, headers: headers);
+    } else {
+      final toggle = req.path.variables["toggle"];
+      String command;
+      if (toggle.contains('true')) {
+        command = 'start';
+      } else {
+        command = 'stop';
+      }
+      _serviceHandler(command, 'netatalk');
+      return Response.ok('');
+    }
+  }
+
   Response _stopall(Request req) {
     _stopAllServices();
     return Response.ok('');
@@ -204,6 +232,7 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
     _serviceHandler('stop', 'teledart');
     _serviceHandler('stop', 'samba');
     _serviceHandler('stop', 'transmission-daemon');
+    _serviceHandler('stop', 'netatalk');
   }
 
   void _startAllServices() {
@@ -211,5 +240,6 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
     _serviceHandler('start', 'teledart');
     _serviceHandler('start', 'samba');
     _serviceHandler('start', 'transmission-daemon');
+    _serviceHandler('start', 'netatalk');
   }
 }

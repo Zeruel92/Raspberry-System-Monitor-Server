@@ -43,5 +43,3 @@ Future<void> _update() async {
     }
   });
 }
-
-//TODO supporting netatalk
