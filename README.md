@@ -8,6 +8,7 @@ Al momento il server fornisce l'API per:
 - [x] Controllo remoto [teledart][2]
 - [x] Controllo remoto Condivisioni Samba (avvia ferma daemon)
 - [x] Controllo remoto server ssh
+- [x] Controllo remoto server netatalk (condivisioni Apple APFS)
 
 
 # Installing service
