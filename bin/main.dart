@@ -16,7 +16,7 @@ Future main() async {
     udpSocket.broadcastEnabled = true;
     final List<int> data = utf8.encode('rpi_broadcast_message');
     Timer.periodic(Duration(seconds: 10), (_) {
-      udpSocket.send(data, InternetAddress('192.168.1.255'), 8889);
+      udpSocket.send(data, InternetAddress('255.255.255.255'), 8889);
     });
   });
   startTimer();
@@ -44,6 +44,5 @@ Future<void> _update() async {
   });
 }
 
-//TODO: wrapper.sh into dart code
-//TODO: detecting broadcast address inside code
-//TODO: supporting netatalk
+//TODO wrapper.sh into dart code
+//TODO supporting netatalk
