@@ -17,6 +17,8 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
     router.route("/teledart/:toggle").linkFunction(_teledart);
     router.route("/smb/:toggle").linkFunction(_smb);
     router.route("/ssh/:toggle").linkFunction(_ssh);
+    router.route("/service/stopall").linkFunction(_stopall);
+    router.route("/service/startall").linkFunction(_startall);
     return router;
   }
 
@@ -175,6 +177,16 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
       _serviceHandler(command, 'ssh');
       return Response.ok('');
     }
+  }
+
+  Response _stopall(Request req) {
+    _stopAllServices();
+    return Response.ok('');
+  }
+
+  Response _startall(Request req) {
+    _startAllServices();
+    return Response.ok('');
   }
 
   void _serviceHandler(String command, String service) {
