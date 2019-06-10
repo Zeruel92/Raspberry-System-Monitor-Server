@@ -215,7 +215,7 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
     final Map<String, dynamic> headers = {};
     headers["content-type"] = "application/json";
     final ProcessResult result = Process.runSync(
-        'bash', ['-c', 'df -l -h'],
+        'bash', ['-c', 'df -l -h | grep -i /dev/loop | grep -i tmpfs'],
         includeParentEnvironment: true, runInShell: true);
     body['df'] = result.stdout;
     return Response.ok(body,headers: headers);
