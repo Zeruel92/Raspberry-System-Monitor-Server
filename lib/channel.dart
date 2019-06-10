@@ -1,3 +1,5 @@
+import 'package:raspberry_system_monitor_server/raspberry_system_monitor_server.dart' as prefix0;
+
 import 'raspberry_system_monitor_server.dart';
 
 class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
@@ -18,6 +20,7 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
     router.route("/smb/:toggle").linkFunction(_smb);
     router.route("/ssh/:toggle").linkFunction(_ssh);
     router.route("/netatalk/:toggle").linkFunction(_netatalk);
+    router.route("/disks").linkFunction(_disks);
     router.route("/service/stopall").linkFunction(_stopall);
     router.route("/service/startall").linkFunction(_startall);
     return router;
@@ -205,6 +208,17 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
       _serviceHandler(command, 'netatalk');
       return Response.ok('');
     }
+  }
+
+  Response _disks(Request req){
+    final Map<String, dynamic> body = {};
+    final Map<String, dynamic> headers = {};
+    headers["content-type"] = "application/json";
+    final ProcessResult result = Process.runSync(
+        'bash', ['-c', 'df -l -h'],
+        includeParentEnvironment: true, runInShell: true);
+    body['df'] = result.stdout;
+    return Response.ok(body,headers: headers);
   }
 
   Response _stopall(Request req) {
