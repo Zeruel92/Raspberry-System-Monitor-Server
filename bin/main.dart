@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:raspberry_system_monitor_server/raspberry_system_monitor_server.dart';
 
 Future main() async {
-  await _update();
+  //await _update();
 
   final app = Application<RaspberrySystemMonitorServerChannel>()
     ..options.configurationFilePath = "config.yaml"
