@@ -21,4 +21,4 @@ RUN pub get --offline
 RUN ls
 RUN [ "cross-build-end" ]
 CMD []
-ENTRYPOINT ["dart", "bin/main.dart"]
+ENTRYPOINT ["dart-sdk/bin/dart", "bin/main.dart"]
