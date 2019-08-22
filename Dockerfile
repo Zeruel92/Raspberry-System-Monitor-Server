@@ -5,7 +5,8 @@ WORKDIR /app
 RUN curl -sf  -o dartsdk-linux-arm-release.zip -L https://storage.googleapis.com/dart-archive/channels/stable/release/2.4.1/sdk/dartsdk-linux-arm-release.zip
 RUN [ "cross-build-start" ]
 
-RUN apt install unzip
+RUN apt update
+RUN apt install -y unzip
 RUN unzip dartsdk-linux-arm-release.zip
 ADD dart-sdk /app/dart-sdk
 ENV PATH $PATH:dart-sdk/bin
