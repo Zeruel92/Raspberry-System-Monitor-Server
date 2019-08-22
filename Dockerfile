@@ -16,6 +16,7 @@ RUN pub get
 
 ADD . /app
 RUN pub get --offline
+RUN ls
 RUN [ "cross-build-end" ]
 CMD []
 ENTRYPOINT ["dart", "bin/main.dart"]
