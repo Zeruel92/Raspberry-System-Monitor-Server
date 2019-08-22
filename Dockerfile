@@ -2,8 +2,7 @@ FROM balenalib/armv7hf-debian
 
 
 WORKDIR /app
-
-RUN wget https://storage.googleapis.com/dart-archive/channels/stable/release/2.4.1/sdk/dartsdk-linux-arm-release.zip
+RUN curl -sf  -o dartsdk-linux-arm-release.zip -L https://storage.googleapis.com/dart-archive/channels/stable/release/2.4.1/sdk/dartsdk-linux-arm-release.zip
 RUN unzip dartsdk-linux-arm-release.zip
 ADD dart-sdk /app/dart-sdk
 ENV PATH $PATH:dart-sdk/bin
