@@ -7,7 +7,7 @@ RUN [ "cross-build-start" ]
 
 RUN apt update
 RUN apt install -y unzip
-RUN unzip dartsdk-linux-arm-release.zip -d /app/dart-sdk
+RUN unzip dartsdk-linux-arm-release.zip -d /app/
 ENV PATH $PATH:dart-sdk/bin
 
 ADD pubspec.* /app/
