@@ -21,6 +21,7 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
     router.route("/disks").linkFunction(_disks);
     router.route("/service/stopall").linkFunction(_stopAll);
     router.route("/service/startall").linkFunction(_startAll);
+    router.route("/pihole/:toggle").linkFunction(_pihole);
     return router;
   }
 
@@ -233,9 +234,40 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
     if (service == 'samba') {
       Process.run('bash', ['-c', 'sudo /etc/init.d/samba $command'],
           includeParentEnvironment: true, runInShell: true);
-    } else {
-      Process.run('bash', ['-c', 'sudo systemctl $command $service'],
+    } else if(service == 'pihole') {
+      Process.run('bash', ['-c', 'docker $command $service'],
           includeParentEnvironment: true, runInShell: true);
+    }
+    else{
+        Process.run('bash', ['-c', 'sudo systemctl $command $service'],
+            includeParentEnvironment: true, runInShell: true);
+      }
+    }
+
+  Response _pihole(Request req){
+    if(req.method == 'GET'){
+      final Map<String, dynamic> body = {};
+      final Map<String, dynamic> headers = {};
+      headers["content-type"] = "application/json";
+      final ProcessResult result = Process.runSync(
+          'bash', ['-c', 'docker ps | grep pihole'],
+          includeParentEnvironment: true, runInShell: true);
+      if (result.stdout.toString().contains('pihole/pihole:latest')) {
+        body['running'] = true;
+      } else {
+        body['running'] = false;
+      }
+      return Response.ok(body, headers: headers);
+    } else {
+      final toggle = req.path.variables["toggle"];
+      String command;
+      if (toggle.contains('true')) {
+        command = 'start';
+      } else {
+        command = 'stop';
+      }
+      _serviceHandler(command, 'pihole');
+      return Response.ok('');
     }
   }
 
@@ -245,6 +277,7 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
     _serviceHandler('stop', 'samba');
     _serviceHandler('stop', 'transmission-daemon');
     _serviceHandler('stop', 'netatalk');
+    _serviceHandler('stop','pihole');
   }
 
   void _startAllServices() {
@@ -253,5 +286,6 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
     _serviceHandler('start', 'samba');
     _serviceHandler('start', 'transmission-daemon');
     _serviceHandler('start', 'netatalk');
+    _serviceHandler('start','pihole');
   }
 }
