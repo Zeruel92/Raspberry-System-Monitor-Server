@@ -1,5 +1,3 @@
-import 'package:raspberry_system_monitor_server/raspberry_system_monitor_server.dart' as prefix0;
-
 import 'raspberry_system_monitor_server.dart';
 
 class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
@@ -21,8 +19,8 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
     router.route("/ssh/:toggle").linkFunction(_ssh);
     router.route("/netatalk/:toggle").linkFunction(_netatalk);
     router.route("/disks").linkFunction(_disks);
-    router.route("/service/stopall").linkFunction(_stopall);
-    router.route("/service/startall").linkFunction(_startall);
+    router.route("/service/stopall").linkFunction(_stopAll);
+    router.route("/service/startall").linkFunction(_startAll);
     return router;
   }
 
@@ -221,12 +219,12 @@ class RaspberrySystemMonitorServerChannel extends ApplicationChannel {
     return Response.ok(body,headers: headers);
   }
 
-  Response _stopall(Request req) {
+  Response _stopAll(Request req) {
     _stopAllServices();
     return Response.ok('');
   }
 
-  Response _startall(Request req) {
+  Response _startAll(Request req) {
     _startAllServices();
     return Response.ok('');
   }
